@@ -20,8 +20,8 @@
 
 | Task | 내용 | 상태 |
 |------|------|------|
-| 1 | 프로젝트 스캐폴딩 | pending |
-| 2 | AGENTS.md + Harness 문서 | pending |
+| 1 | 프로젝트 스캐폴딩 | done (savepoint-1) |
+| 2 | AGENTS.md + Harness 문서 | done (savepoint-1) |
 | 3 | constants.js (TDD) | pending |
 | 4 | board.js (TDD) | pending |
 | 5 | cell.js (TDD) | pending |
