@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지뢰찾기 — Minesweeper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="game-header">
+    <div class="difficulty-buttons">
+      <button class="diff-btn" data-difficulty="beginner">초급</button>
+      <button class="diff-btn" data-difficulty="intermediate">중급</button>
+      <button class="diff-btn" data-difficulty="expert">고급</button>
+    </div>
+    <div class="game-info">
+      <div class="mine-counter">💣 <span id="mine-count">10</span></div>
+      <button id="reset-btn" class="reset-btn">😊</button>
+      <div class="timer">⏱ <span id="timer">000</span></div>
+    </div>
+  </header>
+  <main class="game-board">
+    <div id="board" class="board"></div>
+  </main>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
