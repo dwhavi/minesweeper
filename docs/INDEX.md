@@ -15,18 +15,19 @@
 | docs/plans/2026-05-01-minesweeper.md | 전체 구현 계획 | 완료 |
 | AGENTS.md | 에이전트 진입점 | 완료 |
 | docs/savepoint/savepoint-0.md | 프로젝트 초기 상태 | 완료 |
+| docs/savepoint/savepoint-1.md | 게임 구현 완료 | 완료 |
 
 ## Task 진행 상태
 
 | Task | 내용 | 상태 |
 |------|------|------|
-| 1 | 프로젝트 스캐폴딩 | done (savepoint-1) |
-| 2 | AGENTS.md + Harness 문서 | done (savepoint-1) |
-| 3 | constants.js (TDD) | pending |
-| 4 | board.js (TDD) | pending |
-| 5 | cell.js (TDD) | pending |
-| 6 | game.js (TDD) | pending |
-| 7 | renderer.js | pending |
-| 8 | input.js | pending |
-| 9 | main.js 통합 | pending |
-| 10 | CSS 완성 + 반응형 | pending |
+| 1 | 프로젝트 스캐폴딩 | 완료 |
+| 2 | AGENTS.md + Harness 문서 | 완료 |
+| 3 | constants.js (TDD) | 완료 |
+| 4 | board.js (TDD) | 완료 |
+| 5 | cell.js (TDD) | 완료 |
+| 6 | game.js (TDD) | 완료 |
+| 7 | renderer.js | 완료 |
+| 8 | input.js | 완료 |
+| 9 | main.js 통합 | 완료 |
+| 10 | CSS 완성 + 반응형 | 완료 |

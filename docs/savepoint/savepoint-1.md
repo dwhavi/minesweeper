@@ -1,23 +1,37 @@
-# Save Point 1 — 스캐폴딩 + Harness 문서 완료
+# Save Point 1 — 게임 구현 완료
 
 ## 완료된 작업
-- Task 1: package.json, vitest.config.js, index.html, style.css, .gitignore 생성
-- Task 2: AGENTS.md, docs/ARCHITECTURE.md, docs/golden-rules.md 작성
-- npm install 완료, npm test 빈 스위트 통과 확인
-- 커밋: f98f429
+- Task 3: constants.js (난이도 프리셋, 셀 상수) + TDD
+- Task 4: board.js (보드 생성, 지뢰 배치, 첫 클릭 안전) + TDD
+- Task 5: cell.js (셀 공개, flood fill, 깃발) + TDD
+- Task 6: game.js (승패 판정, 첫 클릭 안전, 타이머) + TDD
+- Task 7: renderer.js (DOM 렌더링)
+- Task 8: input.js (이벤트 위임)
+- Task 9: main.js 통합
+- Task 10: style.css 완성 + 반응형 다크 테마
+
+## 테스트 결과
+- 4 test files, 47 tests — ALL PASSING
 
 ## 생성/수정 파일
-- `package.json`, `vitest.config.js`, `index.html`, `style.css`, `.gitignore`
-- `src/main.js` (placeholder)
-- `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/golden-rules.md`
+- `src/model/constants.js` — DIFFICULTY, CELL_STATE, GAME_STATE, NEIGHBOR_OFFSETS, NUMBER_COLORS
+- `src/model/board.js` — createBoard, placeMines, calculateAdjacent
+- `src/model/cell.js` — revealCell, toggleFlag, revealAllMines
+- `src/model/game.js` — initGame, handleReveal, handleFlag, checkWin
+- `src/view/renderer.js` — renderBoard, updateCell, updateGameInfo
+- `src/controller/input.js` — setupInput (이벤트 위임)
+- `src/main.js` — 게임 초기화, 타이머, 이벤트 연결
+- `style.css` — 다크 테마, 반응형, 적응형 셀 사이즈
+- `__tests__/constants.test.js` — 5 tests
+- `__tests__/board.test.js` — 10 tests
+- `__tests__/cell.test.js` — 12 tests
+- `__tests__/game.test.js` — 20 tests
+- `vitest.config.js` — Vitest 설정
 
 ## 복구 방법
-1. `docs/INDEX.md` 읽고 작업 매핑 확인
-2. `docs/dev-principles.md` 읽고 개발 원칙 준수
-3. `docs/plans/2026-05-01-minesweeper.md` 읽고 전체 계획 확인
+1. `npm install && npm test`로 테스트 확인
+2. `npm run dev`로 로컬 실행
+3. 모든 구현 완료 상태
 
 ## 다음 단계
-- **Task 3:** constants.js (TDD) — 난이도 설정, 셀 상태, 게임 상태 enum
-- **Task 4:** board.js (TDD) — 보드 생성, 지뢰 배치, 주변 지뢰 수
-- **Task 5:** cell.js (TDD) — 셀 열기, 깃발, flood fill
-- **Task 6:** game.js (TDD) — 게임 상태 관리, 승리/패배 판정
+- Vercel 배포
