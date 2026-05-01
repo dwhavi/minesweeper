@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   DIFFICULTY,
   CELL_STATE,
-  GAME_STATUS,
+  GAME_STATE,
 } from '../src/model/constants.js';
 
 describe('constants', () => {
@@ -29,11 +29,12 @@ describe('constants', () => {
     });
   });
 
-  describe('GAME_STATUS', () => {
-    it('should export PLAYING, WON, LOST', () => {
-      expect(GAME_STATUS.PLAYING).toBe('playing');
-      expect(GAME_STATUS.WON).toBe('won');
-      expect(GAME_STATUS.LOST).toBe('lost');
+  describe('GAME_STATE', () => {
+    it('should export IDLE, PLAYING, WON, LOST', () => {
+      expect(GAME_STATE.IDLE).toBe('idle');
+      expect(GAME_STATE.PLAYING).toBe('playing');
+      expect(GAME_STATE.WON).toBe('won');
+      expect(GAME_STATE.LOST).toBe('lost');
     });
   });
 });
