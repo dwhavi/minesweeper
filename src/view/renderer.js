@@ -1,10 +1,11 @@
 // src/view/renderer.js — DOM rendering for the game board
-import { CELL_STATE, NUMBER_COLORS, GAME_STATUS } from '../model/constants.js';
+import { CELL_STATE, NUMBER_COLORS, GAME_STATE, DIFFICULTY } from '../model/constants.js';
 
 const FACE_MAP = {
-  [GAME_STATUS.PLAYING]: '😊',
-  [GAME_STATUS.WON]: '😎',
-  [GAME_STATUS.LOST]: '💀',
+  [GAME_STATE.IDLE]: '😊',
+  [GAME_STATE.PLAYING]: '😊',
+  [GAME_STATE.WON]: '😎',
+  [GAME_STATE.LOST]: '💀',
 };
 
 export function renderBoard(board, boardEl) {
@@ -67,12 +68,13 @@ export function updateCell(cell, cellEl) {
 
 export function updateGameInfo(game, mineCountEl, timerEl, resetBtn) {
   // Mine counter: total mines - flags placed
-  const remaining = game.config.mines - game.flagCount;
+  const totalMines = DIFFICULTY[game.difficulty].mines;
+  const remaining = totalMines - game.flagCount;
   mineCountEl.textContent = String(Math.max(remaining, 0)).padStart(3, '0');
 
   // Timer
   timerEl.textContent = String(Math.min(game.timer, 999)).padStart(3, '0');
 
   // Face button
-  resetBtn.textContent = FACE_MAP[game.status] || '😊';
+  resetBtn.textContent = FACE_MAP[game.state] || '😊';
 }

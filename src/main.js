@@ -1,6 +1,6 @@
 // src/main.js — Minesweeper entry point
-import { createGame, handleReveal, handleFlag, getGameStatus } from './model/game.js';
-import { GAME_STATUS, DIFFICULTY } from './model/constants.js';
+import { initGame, handleReveal, handleFlag } from './model/game.js';
+import { GAME_STATE, DIFFICULTY } from './model/constants.js';
 import { renderBoard, updateCell, updateGameInfo } from './view/renderer.js';
 import { setupInput } from './controller/input.js';
 
@@ -48,24 +48,25 @@ function updateSingleCell(row, col) {
 }
 
 function handleCellReveal(row, col) {
-  const status = handleReveal(game, row, col);
+  const prevState = game.state;
+  handleReveal(game, { row, col });
 
   // Start timer on first click
-  if (!game.firstClick && !timerInterval && status === GAME_STATUS.PLAYING) {
+  if (prevState === GAME_STATE.IDLE && game.state === GAME_STATE.PLAYING) {
     startTimer();
   }
 
   // Re-render entire board (flood fill changes many cells)
   renderFull();
 
-  if (status === GAME_STATUS.LOST || status === GAME_STATUS.WON) {
+  if (game.state === GAME_STATE.LOST || game.state === GAME_STATE.WON) {
     stopTimer();
     updateGameInfo(game, mineCountEl, timerEl, resetBtn);
   }
 }
 
 function handleCellFlag(row, col) {
-  handleFlag(game, row, col);
+  handleFlag(game, { row, col });
   updateSingleCell(row, col);
   updateGameInfo(game, mineCountEl, timerEl, resetBtn);
 }
@@ -79,16 +80,16 @@ function handleDifficultyChange(difficulty) {
     btn.classList.toggle('active', btn.dataset.difficulty === difficulty);
   });
 
-  initGame();
+  resetGame();
 }
 
 function handleReset() {
-  initGame();
+  resetGame();
 }
 
-function initGame() {
+function resetGame() {
   stopTimer();
-  game = createGame(currentDifficulty);
+  game = initGame(currentDifficulty);
   renderFull();
 }
 
@@ -100,4 +101,4 @@ setupInput({
   onReset: handleReset,
 });
 
-initGame();
+resetGame();

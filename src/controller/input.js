@@ -7,7 +7,7 @@ export function setupInput({ onReveal, onFlag, onDifficulty, onReset }) {
     e.preventDefault();
   });
 
-  // Event delegation for left/right click on cells
+  // Event delegation for left click on cells (reveal)
   boardEl.addEventListener('click', (e) => {
     const cellEl = e.target.closest('.cell');
     if (!cellEl) return;
@@ -17,9 +17,11 @@ export function setupInput({ onReveal, onFlag, onDifficulty, onReset }) {
     onReveal(row, col);
   });
 
+  // Event delegation for right click on cells (flag)
   boardEl.addEventListener('contextmenu', (e) => {
     const cellEl = e.target.closest('.cell');
     if (!cellEl) return;
+    e.preventDefault();
     const row = parseInt(cellEl.dataset.row, 10);
     const col = parseInt(cellEl.dataset.col, 10);
     if (isNaN(row) || isNaN(col)) return;
