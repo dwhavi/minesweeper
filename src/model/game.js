@@ -3,7 +3,7 @@
  */
 import { DIFFICULTY, GAME_STATE, CELL_STATE } from './constants.js'
 import { createBoard, placeMines, calculateAdjacent } from './board.js'
-import { revealCell, toggleFlag } from './cell.js'
+import { revealCell, toggleFlag, chordReveal } from './cell.js'
 
 /**
  * Initialize a new game. Mines are NOT placed yet.
@@ -58,6 +58,26 @@ export function handleReveal(game, pos) {
   }
 
   // Auto win check
+  checkWin(game)
+}
+
+/**
+ * Handle chord: click on a revealed number cell to auto-reveal neighbors
+ * when adjacent flags match the number.
+ * @param {object} game
+ * @param {{ row: number, col: number }} pos
+ */
+export function handleChord(game, pos) {
+  if (game.state !== GAME_STATE.PLAYING) return
+
+  const { row, col } = pos
+  const result = chordReveal(game.board, row, col)
+
+  if (result.hitMine) {
+    game.state = GAME_STATE.LOST
+    return
+  }
+
   checkWin(game)
 }
 

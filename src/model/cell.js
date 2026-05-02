@@ -1,4 +1,4 @@
-// src/model/cell.js — Cell reveal, flag, and flood fill
+// src/model/cell.js — Cell reveal, flag, flood fill, chord
 import { CELL_STATE, NEIGHBOR_OFFSETS } from './constants.js';
 
 function getRows(board) {
@@ -62,4 +62,53 @@ export function revealAllMines(board) {
       }
     }
   }
+}
+
+/**
+ * Chord reveal: on a revealed number cell, if adjacent flags match
+ * the number, reveal all remaining hidden neighbors.
+ * @returns {{ hitMine: boolean }}
+ */
+export function chordReveal(board, row, col) {
+  const rows = getRows(board);
+  const cols = getCols(board);
+  const cell = board[row][col];
+
+  if (cell.state !== CELL_STATE.REVEALED || cell.adjacentMines === 0) {
+    return { hitMine: false };
+  }
+
+  // Count flags around
+  let flagCount = 0;
+  for (const [dr, dc] of NEIGHBOR_OFFSETS) {
+    const nr = row + dr;
+    const nc = col + dc;
+    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+      if (board[nr][nc].state === CELL_STATE.FLAGGED) {
+        flagCount++;
+      }
+    }
+  }
+
+  // Only proceed if flags match the number
+  if (flagCount !== cell.adjacentMines) {
+    return { hitMine: false };
+  }
+
+  // Reveal all non-flagged hidden neighbors
+  let hitMine = false;
+  for (const [dr, dc] of NEIGHBOR_OFFSETS) {
+    const nr = row + dr;
+    const nc = col + dc;
+    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+      const neighbor = board[nr][nc];
+      if (neighbor.state === CELL_STATE.HIDDEN) {
+        if (revealCell(board, nr, nc)) {
+          hitMine = true;
+        }
+      }
+    }
+  }
+
+  return { hitMine };
 }

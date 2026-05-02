@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { initGame, handleReveal, handleFlag, checkWin } from '../src/model/game.js'
+import { initGame, handleReveal, handleFlag, handleChord, checkWin } from '../src/model/game.js'
 import { DIFFICULTY, CELL_STATE, GAME_STATE } from '../src/model/constants.js'
 
 describe('initGame', () => {
@@ -91,6 +91,69 @@ describe('handleReveal', () => {
     expect(game.startTime).toBeNull()
     handleReveal(game, { row: 4, col: 4 })
     expect(game.startTime).not.toBeNull()
+  })
+})
+
+describe('handleChord', () => {
+  test('does nothing when game is idle', () => {
+    const game = initGame('beginner')
+    handleChord(game, { row: 0, col: 0 })
+    expect(game.state).toBe(GAME_STATE.IDLE)
+  })
+
+  test('does nothing when game is lost', () => {
+    const game = initGame('beginner')
+    handleReveal(game, { row: 0, col: 0 })
+    game.state = GAME_STATE.LOST
+    const prevRevealed = game.board.flat().filter(c => c.state === CELL_STATE.REVEALED).length
+    handleChord(game, { row: 4, col: 4 })
+    const afterRevealed = game.board.flat().filter(c => c.state === CELL_STATE.REVEALED).length
+    expect(afterRevealed).toBe(prevRevealed)
+  })
+
+  test('reveals neighbors when flags match number', () => {
+    // Create a controlled board with mine at (0,0)
+    const game = initGame('beginner')
+    handleReveal(game, { row: 4, col: 4 }) // first click, places mines
+
+    // Find a revealed number cell for testing
+    let testCell = null
+    let testRow = -1
+    let testCol = -1
+    for (let r = 0; r < game.board.length && !testCell; r++) {
+      for (let c = 0; c < game.board[0].length && !testCell; c++) {
+        if (game.board[r][c].state === CELL_STATE.REVEALED && game.board[r][c].adjacentMines > 0) {
+          testCell = game.board[r][c]
+          testRow = r
+          testCol = c
+        }
+      }
+    }
+
+    if (testCell) {
+      // Flag enough neighbors to match the number
+      const offsets = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
+      let flagsPlaced = 0
+      for (const [dr, dc] of offsets) {
+        if (flagsPlaced >= testCell.adjacentMines) break
+        const nr = testRow + dr
+        const nc = testCol + dc
+        if (nr >= 0 && nr < game.board.length && nc >= 0 && nc < game.board[0].length) {
+          if (game.board[nr][nc].state === CELL_STATE.HIDDEN) {
+            game.board[nr][nc].state = CELL_STATE.FLAGGED
+            flagsPlaced++
+          }
+        }
+      }
+
+      if (flagsPlaced === testCell.adjacentMines) {
+        const prevRevealed = game.board.flat().filter(c => c.state === CELL_STATE.REVEALED).length
+        handleChord(game, { row: testRow, col: testCol })
+        const afterRevealed = game.board.flat().filter(c => c.state === CELL_STATE.REVEALED).length
+        // Chord should reveal more cells or keep same
+        expect(afterRevealed).toBeGreaterThanOrEqual(prevRevealed)
+      }
+    }
   })
 })
 

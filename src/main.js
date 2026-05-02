@@ -1,6 +1,6 @@
 // src/main.js — Minesweeper entry point
-import { initGame, handleReveal, handleFlag } from './model/game.js';
-import { GAME_STATE, DIFFICULTY } from './model/constants.js';
+import { initGame, handleReveal, handleFlag, handleChord } from './model/game.js';
+import { GAME_STATE, CELL_STATE, DIFFICULTY } from './model/constants.js';
 import { renderBoard, updateCell, updateGameInfo } from './view/renderer.js';
 import { setupInput } from './controller/input.js';
 
@@ -49,6 +49,21 @@ function updateSingleCell(row, col) {
 
 function handleCellReveal(row, col) {
   const prevState = game.state;
+
+  // Chord: clicking an already-revealed number cell
+  if (game.state === GAME_STATE.PLAYING) {
+    const cell = game.board[row][col];
+    if (cell.state === CELL_STATE.REVEALED && cell.adjacentMines > 0) {
+      handleChord(game, { row, col });
+      renderFull();
+      if (game.state === GAME_STATE.LOST || game.state === GAME_STATE.WON) {
+        stopTimer();
+        updateGameInfo(game, mineCountEl, timerEl, resetBtn);
+      }
+      return;
+    }
+  }
+
   handleReveal(game, { row, col });
 
   // Start timer on first click
